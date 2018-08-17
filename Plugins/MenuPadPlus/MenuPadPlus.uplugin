@@ -1,0 +1,25 @@
+{
+    "FileVersion" : 3,
+    "Version" : 1,
+    "VersionName" : "1.0.0",
+    "FriendlyName" : "MenuPadPlus",
+    "Description" : "This plugin allows your UMG Blueprints to be navigated with a gamepad.",
+    "Category" : "MenuPadPlus",
+    "CreatedBy" : "Robert Slattery",
+    "CreatedByURL" : "http://robert-slattery.com",
+    "DocsURL" : "",
+    "MarketplaceURL" : "",
+    "SupportURL" : "",
+    "EnabledByDefault" : true,
+    "CanContainContent" : false,
+    "IsBetaVersion" : false,
+    "Installed" : false,
+    "Modules" :
+    [
+        {
+            "Name" : "MenuPadPlus",
+            "Type" : "Runtime",
+            "LoadingPhase" : "PreDefault"
+        }
+    ]
+}
