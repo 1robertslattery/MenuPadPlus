@@ -31,7 +31,7 @@ folders in Visual Studio with "Add Filter" then drag in each file.
 ##### **1. Create a Widget Blueprint**
 ![Alt text](/Screenshots/Description_1.PNG?raw=true)
 ##### 2. Re-parent your Widget Blueprint with UserWidget_MenuPadPlus
-![Alt text](/Screenshots/Description_2.png?raw=true)
+![Alt text](/Screenshots/Description_2.PNG?raw=true)
 ##### 3. Go to the Designer, and open the MenuPadPlus option in the Palette panel to reveal options.  
 ![Alt text](/Screenshots/Description_3.PNG?raw=true)
 ##### 4. Drag in a Vertical/Horizontal Box and then add Buttons to it.
