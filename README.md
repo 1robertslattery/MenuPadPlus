@@ -29,19 +29,19 @@ move the Plugins folder of this repository to the root directory of your game an
 folders in Visual Studio with "Add Filter" then drag in each file.
 
 ##### **1. Create a Widget Blueprint**
-![Alt text](/Screenshots/Description_1.PNG?raw=true)
+![Alt text](/Screenshots/Description1.PNG?raw=true)
 ##### 2. Re-parent your Widget Blueprint with UserWidget_MenuPadPlus
-![Alt text](/Screenshots/Description_2.png?raw=true)
+![Alt text](/Screenshots/Description2.png?raw=true)
 ##### 3. Go to the Designer, and open the MenuPadPlus option in the Palette panel to reveal options.  
-![Alt text](/Screenshots/Description_3.PNG?raw=true)
+![Alt text](/Screenshots/Description3.PNG?raw=true)
 ##### 4. Drag in a Vertical/Horizontal Box and then add Buttons to it.
-![Alt text](/Screenshots/Description_4.PNG?raw=true)
+![Alt text](/Screenshots/Description4.PNG?raw=true)
 ##### 5. Design your menu to your liking
-![Alt text](/Screenshots/Description_5.PNG?raw=true)
+![Alt text](/Screenshots/Description5.PNG?raw=true)
 ##### 6. Create a HUD Blueprint and create your widget from BeginPlay. (Make sure your GameMode has your HUD Blueprint set by default)
-![Alt text](/Screenshots/Description_6.PNG?raw=true)
+![Alt text](/Screenshots/Description6.PNG?raw=true)
 ##### 7. Press Play and Enjoy MenuPadPlus!
-![Alt text](/Screenshots/Description_7.PNG?raw=true)
+![Alt text](/Screenshots/Description7.PNG?raw=true)
 
 If you are using your own Player Controller class, make changes to the source where necessary and move the 
 class to your Plugin directory like in this example or else your project will not compile. 
