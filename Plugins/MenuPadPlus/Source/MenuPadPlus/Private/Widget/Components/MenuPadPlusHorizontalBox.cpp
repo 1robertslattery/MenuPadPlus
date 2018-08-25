@@ -18,6 +18,8 @@
 #include "../../../Classes/Utilities/MenuPadPlusStatics.h"
 #include "Runtime/UMG/Public/Components/HorizontalBox.h"
 #include "Runtime/UMG/Public/Components/HorizontalBoxSlot.h"
+#include "Runtime/Engine/Classes/Engine/Texture.h"
+#include "Runtime/Engine/Classes/Engine/Texture2D.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 
 #define LOCTEXT_NAMESPACE "MenuPadPlus"
@@ -34,9 +36,11 @@ void UMenuPadPlusHorizontalBox::ReleaseSlateResources(bool bReleaseChildren)
 {
 	Super::ReleaseSlateResources(bReleaseChildren);
 
-	MyHorizontalBox.Reset();
 	Buttons.Empty();
 	AlternateImages.Empty();
+	AlternateHoveredSound = nullptr;
+	AlternatePressedSound = nullptr;
+	MyHorizontalBox.Reset();
 }
 
 UClass* UMenuPadPlusHorizontalBox::GetSlotClass() const

@@ -25,7 +25,7 @@ public class MenuPadPlusProject : ModuleRules
 
         PrivateIncludePaths.AddRange(new string[] { "Game/../../Plugins/MenuPadPlus/Source/MenuPadPlus/Private" });
 
-        PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "UMG", "GameplayTasks", "MenuPadPlus" });
+        PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "UMG", "MenuPadPlus" });
         
 		// Uncomment if you are using Slate UI
 		PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });

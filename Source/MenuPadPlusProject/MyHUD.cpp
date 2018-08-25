@@ -29,46 +29,41 @@
 #include "../../Plugins/MenuPadPlus/Source/MenuPadPlus/Classes/Utilities/MenuPadPlusStatics.h"
 #include "../../Plugins/MenuPadPlus/Source/MenuPadPlus/Classes/GameFramework/MyPlayerController.h"
 
+#define PLAYER_CONTROLLER_INDEX 0
+
 AMyHUD::AMyHUD()
 {
-	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-					MenuPadPlus
-	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
+	//~ Begin MenuPadPlus
 	PrimaryActorTick.bCanEverTick = true;
 	static ConstructorHelpers::FClassFinder<UUserWidget_MenuPadPlus> WidgetAsset(TEXT("/Game/UI/MainMenu_Mixed"));
 	if (WidgetAsset.Succeeded()) MenuWidgetBlueprint = WidgetAsset.Class;
-	MenuPtr = nullptr;
+	//~ End MenuPadPlus
 }
 
-#pragma region Actor Interface
 void AMyHUD::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-					MenuPadPlus
-	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
+	//~ Begin MenuPadPlus
 	InitMenuPadPlus();
+	//~ End MenuPadPlus
 }
-#pragma endregion
 
-#pragma region MenuPadPlus
 // Create widget and add to viewport
 void AMyHUD::InitMenuPadPlus()
 {
-	auto const world = GetWorld();
+	class UUserWidget_MenuPadPlus* MenuPtr = nullptr;
+	auto const World = GetWorld();
 
-	if (world != nullptr)
+	if (ensure(World))
 	{
-		auto PC = Cast<AMyPlayerController>(UGameplayStatics::GetPlayerController(world, 0));
+		auto PC = Cast<AMyPlayerController>(UGameplayStatics::GetPlayerController(World, PLAYER_CONTROLLER_INDEX));
 
 		if (PC != nullptr)
 		{
 			if (MenuWidgetBlueprint != NULL)
 			{
-				MenuPtr = CreateWidget<UUserWidget_MenuPadPlus>(world, MenuWidgetBlueprint);
+				MenuPtr = CreateWidget<UUserWidget_MenuPadPlus>(World, MenuWidgetBlueprint);
 
 				if (MenuPtr != nullptr)
 				{
@@ -81,5 +76,4 @@ void AMyHUD::InitMenuPadPlus()
 		}
 	}
 }
-#pragma endregion
 

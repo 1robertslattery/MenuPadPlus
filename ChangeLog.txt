@@ -1,2 +1,8 @@
 2018-08-17: v1.0.0:
 + Initial Commit
+
+2018-08-24: v1.1.0:
++ Improved ability to swap images and sounds
++ Created MyGameViewportClient class to disable outline of focused button
++ Fixed memory leaks in UserWidget_MenuPadPlus class
++ Improved OnPressed/OnHovered button delegates in MenuPadPlusButton class

@@ -32,7 +32,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FMenuPadPlusHorizontalBoxChangedChil
 * * Many Children
 * * Flow Horizontal
 */
-UCLASS(AutoExpandCategories = ("MenuPadPlus | Widgets"))
+UCLASS(AutoExpandCategories = ("MenuPadPlus | Widgets"), meta = (DisplayName = "HorizontalBox"))
 class MENUPADPLUS_API UMenuPadPlusHorizontalBox : public UMenuPadPlusPanelWidget
 {
 	GENERATED_BODY()

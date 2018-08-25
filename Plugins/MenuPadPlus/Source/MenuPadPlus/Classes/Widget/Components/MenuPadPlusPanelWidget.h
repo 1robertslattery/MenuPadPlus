@@ -37,18 +37,30 @@ public:
 	// All Button Children
 	UPROPERTY(BlueprintReadOnly, Category = "MenuPadPlus | Widgets")
 	TArray<class UMenuPadPlusButton*> Buttons;
+	
+	// Do we want to replace our Normal/Hovered/Pressed button images with different ones?
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MenuPadPlus | Images", meta = (DisplayName = "Use Alternate Images"))
+	bool bUseAlternateImages;
 
-	// Should we use images for the buttons?
+	// All Alternate Normal/Hovered/Pressed Images
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MenuPadPlus | Images")
-	bool DoNotUseImages;
+	TArray<class UTexture2D*> AlternateImages;
 
-	// **NOT IMPLEMENTED** Do we want to replace our button images with different ones?
+	// Alternate Button Size X
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MenuPadPlus | Images")
-	bool UseAlternateImages;
+	float AlternateSizeX;
 
-	// **NOT IMPLEMENTED** All Alternate Images
+	// Alternate Button Size Y
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MenuPadPlus | Images")
-	TArray<class UObject*> AlternateImages;
+	float AlternateSizeY;
+
+	// Alternate Hovered Sound Cue
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MenuPadPlus | Sounds")
+	class USoundCue* AlternateHoveredSound;
+
+	// Alternate Pressed Sound Cue
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MenuPadPlus | Sounds")
+	class USoundCue* AlternatePressedSound;
 	
 public:
 

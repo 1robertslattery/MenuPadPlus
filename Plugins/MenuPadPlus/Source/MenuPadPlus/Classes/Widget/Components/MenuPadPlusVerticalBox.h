@@ -19,7 +19,6 @@
 #include "UObject/Object.h"
 #include "Widgets/SWidget.h"
 #include "Widgets/SBoxPanel.h"
-//#include "Runtime/UMG/Public/Components/PanelWidget.h"
 #include "MenuPadPlusPanelWidget.h"
 #include "MenuPadPlusVerticalBox.generated.h"
 
@@ -34,7 +33,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FMenuPadPlusVerticalBoxChangedChild,
 * * Many Children
 * * Flows Vertical
 */
-UCLASS(AutoExpandCategories = ("MenuPadPlus | Widgets"))
+UCLASS(AutoExpandCategories = ("MenuPadPlus | Widgets"), meta = (DisplayName = "VerticalBox"))
 class MENUPADPLUS_API UMenuPadPlusVerticalBox : public UMenuPadPlusPanelWidget
 {
 	GENERATED_BODY()

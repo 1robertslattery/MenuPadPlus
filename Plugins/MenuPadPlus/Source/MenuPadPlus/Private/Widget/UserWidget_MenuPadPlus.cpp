@@ -39,62 +39,69 @@
 #define LOCTEXT_NAMESPACE "MenuPadPlus"
 
 #pragma region UUserWidget Interface
-// Sets default values
 void UUserWidget_MenuPadPlus::NativeConstruct()
 {
 	Super::NativeConstruct();
 
-	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-					MenuPadPlus
-	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-		
-	HasFinishedSetup = false;
+	//~ Begin MenuPadPlus
+	bHasFinishedSetup = false;
 	Timer = 0.f;
 	TimeNeededToLoad = 0.08f;
+	ButtonProperties.NormalTextureArray.Empty();
+	ButtonProperties.HoveredTextureArray.Empty();
+	ButtonProperties.PressedTextureArray.Empty();
 	InitMenus();
+	//~ End MenuPadPlus
 }
 
 void UUserWidget_MenuPadPlus::NativeDestruct()
 {
 	Super::NativeDestruct();
 
-	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-					MenuPadPlus
-	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
+	//~ Begin MenuPadPlus
 	ButtonProperties.ClearAll();
+		
+	if (BoxData.RootMenu_1) { delete BoxData.RootMenu_1;  BoxData.RootMenu_1 = nullptr; }
+	if (BoxData.RootMenu_2) { delete BoxData.RootMenu_2;  BoxData.RootMenu_2 = nullptr; }
+	if (BoxData.RootMenu_3) { delete BoxData.RootMenu_3;  BoxData.RootMenu_3 = nullptr; }
+	if (BoxData.RootMenu_4) { delete BoxData.RootMenu_4;  BoxData.RootMenu_4 = nullptr; }
+	if (BoxData.RootMenu_5) { delete BoxData.RootMenu_5;  BoxData.RootMenu_5 = nullptr; }
+	if (BoxData.RootMenu_6) { delete BoxData.RootMenu_6;  BoxData.RootMenu_6 = nullptr; }
+	if (BoxData.RootMenu_7) { delete BoxData.RootMenu_7;  BoxData.RootMenu_7 = nullptr; }
+	if (BoxData.RootMenu_8) { delete BoxData.RootMenu_8;  BoxData.RootMenu_8 = nullptr; }
+	if (BoxData.RootMenu_9) { delete BoxData.RootMenu_9;  BoxData.RootMenu_9 = nullptr; }
+	if (BoxData.RootMenu_10) { delete BoxData.RootMenu_10;  BoxData.RootMenu_10 = nullptr; }
+	if (BoxData.RootMenu_11) { delete BoxData.RootMenu_11;  BoxData.RootMenu_11 = nullptr; }
+	if (BoxData.RootMenu_12) { delete BoxData.RootMenu_12;  BoxData.RootMenu_12 = nullptr; }
+	
 	OwnerContainer = nullptr;
+	//~ End MenuPadPlus
 }
 
-// Called every frame
 void UUserWidget_MenuPadPlus::NativeTick(const FGeometry& MyGeometry, float DeltaTime)
 {
 	Super::NativeTick(MyGeometry, DeltaTime);
 	
-	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-					MenuPadPlus
-	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-	
-	MenuPadPlusLogic(DeltaTime);
+	//~ Begin MenuPadPlus
+	RunMenuPadPlus(DeltaTime);
+	//~ End MenuPadPlus
 }
 
 // Use to "Go Back" in Menus.
 FReply UUserWidget_MenuPadPlus::NativeOnKeyUp(const FGeometry& InGeometry, const FKeyEvent& InKeyEvent)
 {
-	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-					MenuPadPlus
-	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
-	auto const world = GetWorld();
+	//~ Begin MenuPadPlus
+	auto const World = GetWorld();
 	auto ArrayLength = GetNumMenus(ButtonProperties.BoxArray);
+	auto const MenuCount = 1;
 
-	if (world != nullptr)
+	if (ensure(World))
 	{
-		auto PC = Cast<AMyPlayerController>(UGameplayStatics::GetPlayerController(world, 0));
+		auto PC = Cast<AMyPlayerController>(UGameplayStatics::GetPlayerController(World, PLAYER_CONTROLLER_INDEX));
 
 		if (PC != nullptr)
 		{
-			if (ArrayLength > 1)
+			if (ArrayLength > MenuCount)
 			{
 				for (int32 i = 0; i < ArrayLength; ++i)
 				{
@@ -109,9 +116,15 @@ FReply UUserWidget_MenuPadPlus::NativeOnKeyUp(const FGeometry& InGeometry, const
 							// Show Previous Menu
 							ButtonProperties.BoxArray[i - 1]->SetVisibility(ESlateVisibility::Visible);
 
+							// Force Normal State of Buttons
+							int32 BoxChildrenNum = ButtonProperties.BoxArray[i - 1]->Buttons.Num();
+							
+							for (int32 j = 0; j < BoxChildrenNum; ++j)
+								ButtonProperties.BoxArray[i - 1]->Buttons[j]->ForceNormalText();
+							
 							// Set new focus on previous menu button
 							UMenuPadPlusStatics::SetButtonFocus(ButtonProperties.BoxArray[i - 1]->GetFirstWidget(), PC);
-
+							
 							// TODO: Add Pressed Sound
 
 							return FReply::Handled();
@@ -121,6 +134,7 @@ FReply UUserWidget_MenuPadPlus::NativeOnKeyUp(const FGeometry& InGeometry, const
 			}
 		}
 	}
+	//~ End MenuPadPlus
 
 	return FReply::Unhandled();
 }
@@ -129,7 +143,7 @@ FReply UUserWidget_MenuPadPlus::NativeOnKeyUp(const FGeometry& InGeometry, const
 #pragma region MenuPadPlus
 int32 UUserWidget_MenuPadPlus::InitMenus()
 {
-	// Allows 8 by default
+	// Allows 12 by default
 	BoxData.RootMenu_1 = nullptr;
 	BoxData.RootMenu_2 = nullptr;
 	BoxData.RootMenu_3 = nullptr;
@@ -138,20 +152,28 @@ int32 UUserWidget_MenuPadPlus::InitMenus()
 	BoxData.RootMenu_6 = nullptr;
 	BoxData.RootMenu_7 = nullptr;
 	BoxData.RootMenu_8 = nullptr;
+	BoxData.RootMenu_9 = nullptr;
+	BoxData.RootMenu_10 = nullptr;
+	BoxData.RootMenu_11 = nullptr;
+	BoxData.RootMenu_12 = nullptr;
 
-	SetMenuChildren(BoxData.RootMenu_1, 0);
-	SetMenuChildren(BoxData.RootMenu_2, 1);
-	SetMenuChildren(BoxData.RootMenu_3, 2);
-	SetMenuChildren(BoxData.RootMenu_4, 3);
-	SetMenuChildren(BoxData.RootMenu_5, 4);
-	SetMenuChildren(BoxData.RootMenu_6, 5);
-	SetMenuChildren(BoxData.RootMenu_7, 6);
-	SetMenuChildren(BoxData.RootMenu_8, 7);
+	SetMenuChildren(BoxData.RootMenu_1, ROOT_MENU_ONE);
+	SetMenuChildren(BoxData.RootMenu_2, ROOT_MENU_TWO);
+	SetMenuChildren(BoxData.RootMenu_3, ROOT_MENU_THREE);
+	SetMenuChildren(BoxData.RootMenu_4, ROOT_MENU_FOUR);
+	SetMenuChildren(BoxData.RootMenu_5, ROOT_MENU_FIVE);
+	SetMenuChildren(BoxData.RootMenu_6, ROOT_MENU_SIX);
+	SetMenuChildren(BoxData.RootMenu_7, ROOT_MENU_SEVEN);
+	SetMenuChildren(BoxData.RootMenu_8, ROOT_MENU_EIGHT);
+	SetMenuChildren(BoxData.RootMenu_9, ROOT_MENU_NINE);
+	SetMenuChildren(BoxData.RootMenu_10, ROOT_MENU_TEN);
+	SetMenuChildren(BoxData.RootMenu_11, ROOT_MENU_ELEVEN);
+	SetMenuChildren(BoxData.RootMenu_12, ROOT_MENU_TWELVE);
 
-	return 0;
+	return SUCCESS;
 }
 
-UMenuPadPlusPanelWidget* UUserWidget_MenuPadPlus::AddToArray(class UMenuPadPlusPanelWidget* RootMenu)
+UMenuPadPlusPanelWidget* UUserWidget_MenuPadPlus::FillArrayWith(class UMenuPadPlusPanelWidget* RootMenu)
 {
 	UMenuPadPlusPanelWidget* retVal = nullptr;
 
@@ -164,14 +186,14 @@ UMenuPadPlusPanelWidget* UUserWidget_MenuPadPlus::AddToArray(class UMenuPadPlusP
 	return retVal;
 }
 
-void UUserWidget_MenuPadPlus::SetMenuChildren(class UMenuPadPlusPanelWidget* RootMenu, const int32 Index)
+int32 UUserWidget_MenuPadPlus::SetMenuChildren(class UMenuPadPlusPanelWidget* RootMenu, const int32 Index)
 {
 	if (UPanelWidget* RootPanel = Cast<UPanelWidget>(GetRootWidget()))
 	{
 		if ((RootMenu = Cast<UMenuPadPlusPanelWidget>(RootPanel->GetChildAt(Index))) != 0)
 		{
-			AddToArray(RootMenu);
-			int32 BoxChildrenNum = RootMenu->GetChildrenCount();
+			FillArrayWith(RootMenu);
+			auto BoxChildrenNum = RootMenu->GetChildrenCount();
 
 			for (int32 i = 0; i < BoxChildrenNum; ++i)
 			{
@@ -179,44 +201,139 @@ void UUserWidget_MenuPadPlus::SetMenuChildren(class UMenuPadPlusPanelWidget* Roo
 				{
 					RootMenu->Buttons.Add(Button);
 					Button->OwnerContainer = RootMenu;
+
+					auto ButtonChildrenNum = RootMenu->Buttons.Num();
+
+					for (int32 j = 0; j < ButtonChildrenNum; ++j)
+					{
+						if (UTexture2D* NormalImage = Cast<UTexture2D>(RootMenu->Buttons[j]->WidgetStyle.Normal.GetResourceObject()))
+							ButtonProperties.NormalTextureArray.Add(NormalImage);
+
+						if (UTexture2D* HoveredImage = Cast<UTexture2D>(RootMenu->Buttons[j]->WidgetStyle.Hovered.GetResourceObject()))
+							ButtonProperties.HoveredTextureArray.Add(HoveredImage);
+
+						if (UTexture2D* PressedImage = Cast<UTexture2D>(RootMenu->Buttons[j]->WidgetStyle.Pressed.GetResourceObject()))
+							ButtonProperties.PressedTextureArray.Add(PressedImage);
+					}
 				}
 			}
 		}
 	}
+	
+	return SUCCESS;
 }
 
 // Runs the system
-void UUserWidget_MenuPadPlus::MenuPadPlusLogic(float DeltaSeconds)
+void UUserWidget_MenuPadPlus::RunMenuPadPlus(float DeltaSeconds)
 {
-	if (!HasFinishedSetup)
+	if (!bHasFinishedSetup)
 	{
-		if (GetDelay() < GetTimeNeededToLoad()) RunDelay(DeltaSeconds);
-		else HasFinishedSetup = true;
+		if (GetTimer() < GetTimeNeededToLoad()) RunTimer(DeltaSeconds);
+		else bHasFinishedSetup = true;
 	}
 	else
 	{
-		HandleMenuAt(0);
-		HandleMenuAt(1);
-		HandleMenuAt(2);
-		HandleMenuAt(3);
-		HandleMenuAt(4);
-		HandleMenuAt(5);
-		HandleMenuAt(6);
-		HandleMenuAt(7);
+		RunMenuAt(ROOT_MENU_ONE);
+		RunMenuAt(ROOT_MENU_TWO);
+		RunMenuAt(ROOT_MENU_THREE);
+		RunMenuAt(ROOT_MENU_FOUR);
+		RunMenuAt(ROOT_MENU_FIVE);
+		RunMenuAt(ROOT_MENU_SIX);
+		RunMenuAt(ROOT_MENU_SEVEN);
+		RunMenuAt(ROOT_MENU_EIGHT);
+		RunMenuAt(ROOT_MENU_NINE);
+		RunMenuAt(ROOT_MENU_TEN);
+		RunMenuAt(ROOT_MENU_ELEVEN);
+		RunMenuAt(ROOT_MENU_TWELVE);
 	}
 }
 
 void UUserWidget_MenuPadPlus::OnJoystickAxisChanged(
 	  class TArray<class UMenuPadPlusButton*> ButtonsArray
+	, class AMyPlayerController* InPC)
+{
+	auto const MenuCount = 0;
+
+	if (ButtonsArray.Num() > MenuCount && InPC)
+	{
+		int32 ArrayLength = ButtonsArray.Num();
+				
+		for (int32 i = 0; i < ArrayLength; ++i)
+		{
+			FVector2D NormalSize = ButtonsArray[i]->WidgetStyle.Normal.GetImageSize();
+			FVector2D HoveredSize = ButtonsArray[i]->WidgetStyle.Hovered.GetImageSize();
+			FVector2D PressedSize = ButtonsArray[i]->WidgetStyle.Pressed.GetImageSize();
+
+			class USoundCue* HoveredSound = Cast<USoundCue>(ButtonsArray[i]->WidgetStyle.HoveredSlateSound.GetResourceObject());
+			class USoundCue* PressedSound = Cast<USoundCue>(ButtonsArray[i]->WidgetStyle.PressedSlateSound.GetResourceObject());
+			
+			if (ButtonsArray[i]->HasUserFocus(InPC))
+			{
+				FButtonStyle ButtonStyle;
+
+				ButtonStyle.Normal.SetResourceObject(ButtonProperties.HoveredTextureArray[i]);
+				ButtonStyle.Hovered.SetResourceObject(ButtonProperties.HoveredTextureArray[i]);
+				ButtonStyle.Pressed.SetResourceObject(ButtonProperties.PressedTextureArray[i]);
+
+				ButtonStyle.Normal.ImageSize = NormalSize;
+				ButtonStyle.Hovered.ImageSize = HoveredSize;
+				ButtonStyle.Pressed.ImageSize = PressedSize;
+
+				ButtonStyle.HoveredSlateSound.SetResourceObject(HoveredSound);
+				ButtonStyle.PressedSlateSound.SetResourceObject(PressedSound);
+
+				if (!ButtonsArray[i]->bCanPlayHoveredSound)
+				{
+					auto const World = GetWorld();
+					if (ensure(World)) UGameplayStatics::PlaySound2D(World, HoveredSound);
+					ButtonsArray[i]->bCanPlayHoveredSound = true;
+				}
+
+				ButtonsArray[i]->SetStyle(ButtonStyle);
+				if (!ButtonsArray[i]->bHasForcedPressed) ButtonsArray[i]->ForceHoveredText();
+			}
+			else
+			{
+				FButtonStyle ButtonStyle;
+					
+				ButtonStyle.Normal.SetResourceObject(ButtonProperties.NormalTextureArray[i]);
+				ButtonStyle.Hovered.SetResourceObject(ButtonProperties.HoveredTextureArray[i]);
+				ButtonStyle.Pressed.SetResourceObject(ButtonProperties.PressedTextureArray[i]);
+
+				ButtonStyle.Normal.ImageSize = NormalSize;
+				ButtonStyle.Hovered.ImageSize = HoveredSize;
+				ButtonStyle.Pressed.ImageSize = PressedSize;
+
+				ButtonStyle.PressedSlateSound.SetResourceObject(PressedSound);
+				ButtonStyle.HoveredSlateSound.SetResourceObject(HoveredSound);
+					
+				if (ButtonsArray[i]->bCanPlayHoveredSound) ButtonsArray[i]->bCanPlayHoveredSound = false;
+										
+				ButtonsArray[i]->SetStyle(ButtonStyle);
+				ButtonsArray[i]->ForceNormalText();
+			}
+		}
+	}
+}
+
+// When we want to use different images
+void UUserWidget_MenuPadPlus::OnJoystickAxisChangedAlternate(
+	  TArray<class UMenuPadPlusButton*> ButtonsArray
 	, class UObject* NormalTexture
 	, class UObject* HoveredTexture
 	, class UObject* PressedTexture
+	, float ImageSizeX
+	, float ImageSizeY
+	, class USoundCue* HoveredSound
+	, class USoundCue* PressedSound
 	, class AMyPlayerController* InPC)
 {
-	if (ButtonsArray.Num() > 0 && InPC)
+	auto const MenuCount = 0;
+
+	if (ButtonsArray.Num() > MenuCount && InPC)
 	{
 		int32 ArrayLength = ButtonsArray.Num();
-		
+
 		for (int32 i = 0; i < ArrayLength; ++i)
 		{
 			if (ButtonsArray[i]->HasUserFocus(InPC))
@@ -226,28 +343,24 @@ void UUserWidget_MenuPadPlus::OnJoystickAxisChanged(
 				ButtonStyle.Hovered.SetResourceObject(HoveredTexture);
 				ButtonStyle.Pressed.SetResourceObject(PressedTexture);
 
-				ButtonStyle.Normal.ImageSize = FVector2D(ButtonProperties.ImageX, ButtonProperties.ImageY);
-				ButtonStyle.Hovered.ImageSize = FVector2D(ButtonProperties.ImageX, ButtonProperties.ImageY);
-				ButtonStyle.Pressed.ImageSize = FVector2D(ButtonProperties.ImageX, ButtonProperties.ImageY);
+				ButtonStyle.Normal.ImageSize = FVector2D(ImageSizeX, ImageSizeY);
+				ButtonStyle.Hovered.ImageSize = FVector2D(ImageSizeX, ImageSizeY);
+				ButtonStyle.Pressed.ImageSize = FVector2D(ImageSizeX, ImageSizeY);
 
-				if (ButtonProperties.PressedSound != NULL) ButtonStyle.PressedSlateSound.SetResourceObject(ButtonProperties.PressedSound);
+				if (PressedSound != NULL) ButtonStyle.PressedSlateSound.SetResourceObject(PressedSound);
 
-				if (ButtonProperties.HoveredSound != NULL)
+				if (HoveredSound != NULL)
 				{
-					if (!ButtonsArray[i]->canPlayHoveredSound)
+					if (!ButtonsArray[i]->bCanPlayHoveredSound)
 					{
-						auto const world = GetWorld();
-
-						if (world != nullptr)
-						{
-							UGameplayStatics::PlaySound2D(world, ButtonProperties.HoveredSound);
-							ButtonsArray[i]->canPlayHoveredSound = true;
-						}
+						auto const World = GetWorld();
+						if (ensure(World)) UGameplayStatics::PlaySound2D(World, HoveredSound);
+						ButtonsArray[i]->bCanPlayHoveredSound = true;
 					}
 				}
 
 				ButtonsArray[i]->SetStyle(ButtonStyle);
-				ButtonsArray[i]->ForceHover();
+				if (!ButtonsArray[i]->bHasForcedPressed) ButtonsArray[i]->ForceHoveredText();
 			}
 			else
 			{
@@ -255,34 +368,49 @@ void UUserWidget_MenuPadPlus::OnJoystickAxisChanged(
 				ButtonStyle.Normal.SetResourceObject(NormalTexture);
 				ButtonStyle.Hovered.SetResourceObject(NormalTexture);
 
-				ButtonStyle.Normal.ImageSize = FVector2D(ButtonProperties.ImageX, ButtonProperties.ImageY);
-				ButtonStyle.Hovered.ImageSize = FVector2D(ButtonProperties.ImageX, ButtonProperties.ImageY);
+				ButtonStyle.Normal.ImageSize = FVector2D(ImageSizeX, ImageSizeY);
+				ButtonStyle.Hovered.ImageSize = FVector2D(ImageSizeX, ImageSizeY);
 
-				if (ButtonsArray[i]->canPlayHoveredSound) ButtonsArray[i]->canPlayHoveredSound = false;
+				if (ButtonsArray[i]->bCanPlayHoveredSound) ButtonsArray[i]->bCanPlayHoveredSound = false;
 
 				ButtonsArray[i]->SetStyle(ButtonStyle);
-				ButtonsArray[i]->ForceNormal();
+				ButtonsArray[i]->ForceNormalText();
 			}
 		}
 	}
 }
 
-void UUserWidget_MenuPadPlus::HandleMenuAt(const int32 Index)
+void UUserWidget_MenuPadPlus::RunMenuAt(const int32 Index)
 {
-	if (GetNumMenus(ButtonProperties.BoxArray) > 0)
+	auto const MenuCount = 0;
+	auto const AlternateImageCount = 2;
+	auto const NormalIndex = 0;
+	auto const HoveredIndex = 1;
+	auto const PressedIndex = 2;
+
+	if (GetNumMenus(ButtonProperties.BoxArray) > MenuCount)
 	{
 		if (ButtonProperties.BoxArray.IsValidIndex(Index))
 		{
-			if (ButtonProperties.BoxArray[Index]->DoNotUseImages)
+			if (ButtonProperties.BoxArray[Index]->bUseAlternateImages == true)
 			{
 				if (ButtonProperties.BoxArray[Index]->IsVisible())
 				{
 					if (ButtonProperties.BoxArray[Index]->DoesContainButtons())
 					{
-						OnJoystickAxisChanged(
-							  ButtonProperties.BoxArray[Index]->Buttons							// Buttons
-							, NULL, NULL, NULL													// Button Images
-							, ButtonProperties.BoxArray[Index]->GetOwningPlayerController());	// The Player Controller
+						if (ButtonProperties.BoxArray[Index]->AlternateImages.Num() > AlternateImageCount)
+						{
+							OnJoystickAxisChangedAlternate(
+								  ButtonProperties.BoxArray[Index]->Buttons							// Buttons
+								, ButtonProperties.BoxArray[Index]->AlternateImages[NormalIndex]	// Normal Texture
+								, ButtonProperties.BoxArray[Index]->AlternateImages[HoveredIndex]	// Hovered Texture
+								, ButtonProperties.BoxArray[Index]->AlternateImages[PressedIndex]	// Pressed Texture
+								, ButtonProperties.BoxArray[Index]->AlternateSizeX					// Size X
+								, ButtonProperties.BoxArray[Index]->AlternateSizeY					// Size Y
+								, ButtonProperties.BoxArray[Index]->AlternateHoveredSound			// Hovered Sound
+								, ButtonProperties.BoxArray[Index]->AlternatePressedSound			// Pressed Sound
+								, ButtonProperties.BoxArray[Index]->GetOwningPlayerController());	// The Player Controller
+						}
 					}
 				}
 			}
@@ -293,9 +421,8 @@ void UUserWidget_MenuPadPlus::HandleMenuAt(const int32 Index)
 					if (ButtonProperties.BoxArray[Index]->DoesContainButtons())
 					{
 						OnJoystickAxisChanged(
-							  ButtonProperties.BoxArray[Index]->Buttons															// Buttons
-							, ButtonProperties.NormalTexture, ButtonProperties.HoveredTexture, ButtonProperties.PressedTexture	// Button Images
-							, ButtonProperties.BoxArray[Index]->GetOwningPlayerController());									// The Player Controller
+							  ButtonProperties.BoxArray[Index]->Buttons							// Buttons
+							, ButtonProperties.BoxArray[Index]->GetOwningPlayerController());	// The Player Controller
 					}
 				}
 			}
@@ -306,22 +433,22 @@ void UUserWidget_MenuPadPlus::HandleMenuAt(const int32 Index)
 UMenuPadPlusButton* UUserWidget_MenuPadPlus::GetFocusedWidget(TArray<class UMenuPadPlusButton*> Buttons)
 {
 	for (auto& Widget : Buttons)
-	{
-		if (Widget->hasForcedHover)
+		if (Widget->bHasForcedHover)
 			return Widget;
-	}
-
+	
 	return nullptr;
 }
 
 UMenuPadPlusButton* UUserWidget_MenuPadPlus::GetFirstWidget()
 {
+	auto const MenuCount = 0;
+
 	if (UPanelWidget* RootPanel = Cast<UPanelWidget>(GetRootWidget()))
 	{
-		if (GetNumMenus(ButtonProperties.BoxArray) > 0)
+		if (GetNumMenus(ButtonProperties.BoxArray) > MenuCount)
 		{
-			if ((ButtonProperties.BoxArray[0] = Cast<UMenuPadPlusPanelWidget>(RootPanel->GetChildAt(0))) != 0)
-				return ButtonProperties.BoxArray[0]->GetFirstWidget();
+			if ((ButtonProperties.BoxArray[ROOT_MENU_ONE] = Cast<UMenuPadPlusPanelWidget>(RootPanel->GetChildAt(MenuCount))) != 0)
+				return ButtonProperties.BoxArray[ROOT_MENU_ONE]->GetFirstWidget();
 			else
 				return nullptr;
 		}
@@ -332,9 +459,10 @@ UMenuPadPlusButton* UUserWidget_MenuPadPlus::GetFirstWidget()
 
 UMenuPadPlusButton* UUserWidget_MenuPadPlus::GetPreviousWidget()
 {
+	auto const MenuCount = 1;
 	auto VerticalArrayLength = GetNumMenus(ButtonProperties.BoxArray);
 
-	if (VerticalArrayLength > 1)
+	if (VerticalArrayLength > MenuCount)
 		for (int32 i = 0; i < VerticalArrayLength; ++i)
 			return ButtonProperties.BoxArray[i - 1]->GetFirstWidget();
 		
@@ -344,13 +472,13 @@ UMenuPadPlusButton* UUserWidget_MenuPadPlus::GetPreviousWidget()
 void UUserWidget_MenuPadPlus::ResetAllWidgetFocus(TArray<class UMenuPadPlusButton*> CurrentButton)
 {
 	for (auto const& Widget : CurrentButton)
-		Widget->ForceNormal();
+		Widget->ForceNormalText();
 
-	auto const world = GetWorld();
-	
-	if (world != nullptr)
+	auto const World = GetWorld();
+
+	if (ensure(World))
 	{
-		auto PC = Cast<AMyPlayerController>(UGameplayStatics::GetPlayerController(world, 0));
+		auto PC = Cast<AMyPlayerController>(UGameplayStatics::GetPlayerController(World, PLAYER_CONTROLLER_INDEX));
 		if (PC != nullptr) UMenuPadPlusStatics::SetButtonFocus(GetFirstWidget(), PC);
 	}
 }
@@ -361,7 +489,7 @@ int32 UUserWidget_MenuPadPlus::GetNumMenus(TArray<class UMenuPadPlusPanelWidget*
 	return RootMenus.Num();
 }
 
-float UUserWidget_MenuPadPlus::GetDelay()
+float UUserWidget_MenuPadPlus::GetTimer()
 {
 	return Timer;
 }
@@ -371,9 +499,9 @@ float UUserWidget_MenuPadPlus::GetTimeNeededToLoad()
 	return TimeNeededToLoad;
 }
 
-float UUserWidget_MenuPadPlus::RunDelay(float DeltaSeconds)
+float UUserWidget_MenuPadPlus::RunTimer(float DeltaSeconds)
 {
-	return Timer += 1 * DeltaSeconds;
+	return Timer += (1 * DeltaSeconds);
 }
 #pragma endregion
 

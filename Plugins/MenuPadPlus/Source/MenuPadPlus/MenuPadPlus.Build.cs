@@ -22,14 +22,13 @@ namespace UnrealBuildTool.Rules
 		{
 			PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 			bEnableShadowVariableWarnings = false;
-
-            //PublicIncludePaths.AddRange(new string[] { "MenuPadPlus/Public" });
+            
             PublicIncludePaths.Add(Path.Combine(ModuleDirectory, "Public"));
             PublicIncludePaths.Add(Path.Combine(ModuleDirectory, "Classes"));
 
             PrivateIncludePaths.AddRange(new string[] { "MenuPadPlus/Private" });
 
-			PublicDependencyModuleNames.AddRange(new string[]{ "Core", "CoreUObject", "Engine", "InputCore", "UnrealEd", "UMG", "GameplayTasks", "MenuPadPlus" });
+			PublicDependencyModuleNames.AddRange(new string[]{ "Core", "CoreUObject", "Engine", "InputCore", "UnrealEd", "UMG", "MenuPadPlus" });
 
 			PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });
 		}

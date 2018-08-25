@@ -18,6 +18,8 @@
 #include "../../../Classes/Utilities/MenuPadPlusStatics.h"
 #include "Runtime/UMG/Public/Components/VerticalBox.h"
 #include "Runtime/UMG/Public/Components/VerticalBoxSlot.h"
+#include "Runtime/Engine/Classes/Engine/Texture.h"
+#include "Runtime/Engine/Classes/Engine/Texture2D.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 
 #define LOCTEXT_NAMESPACE "MenuPadPlus"
@@ -34,9 +36,11 @@ void UMenuPadPlusVerticalBox::ReleaseSlateResources(bool bReleaseChildren)
 {
 	Super::ReleaseSlateResources(bReleaseChildren);
 
-	MyVerticalBox.Reset();
 	Buttons.Empty();
 	AlternateImages.Empty();
+	AlternateHoveredSound = nullptr;
+	AlternatePressedSound = nullptr;
+	MyVerticalBox.Reset();
 }
 
 UClass* UMenuPadPlusVerticalBox::GetSlotClass() const

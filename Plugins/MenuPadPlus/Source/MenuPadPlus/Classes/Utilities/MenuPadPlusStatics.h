@@ -35,11 +35,7 @@ class MENUPADPLUS_API UMenuPadPlusStatics : public UBlueprintFunctionLibrary
 
 public:
 	
-	// **NOTE: Overriden by UUserWidget_MenuPadPlus** Used for changing navigation of VerticalBox/HorizontalBox container.
-	UFUNCTION(Category = "MenuPadPlus | Utilities", BlueprintCallable)
-	static void SetNewContainer(TScriptInterface<IMenuPadPlusInterface> Container, bool PreserveForCancel = false);
-
-	// Get navigable container
+	// Get Active Interface
 	UFUNCTION(Category = "MenuPadPlus | Utilities", BlueprintCallable)
 	static TScriptInterface<IMenuPadPlusInterface> GetActiveContainer();
 
@@ -47,24 +43,16 @@ public:
 	UFUNCTION(Category = "MenuPadPlus | Utilities", BlueprintCallable)
 	static void SetWidgetFocus(TScriptInterface<IMenuPadPlusInterface> Container, UMenuPadPlusButton* NavigableWidget);
 
-	// Unfocus all navigable widgets for all containers
+	// Disable All Widget Focus
 	UFUNCTION(Category = "MenuPadPlus | Utilities", BlueprintCallable)
 	static void ResetAllWidgetFocus();
 
-	// Get the hovered button inside a container
+	// Get the Hovered Button Inside a Menu
 	UFUNCTION(Category = "MenuPadPlus | Utilities", BlueprintCallable)
 	static UMenuPadPlusButton* GetFocusedWidget(TScriptInterface<IMenuPadPlusInterface> Container);
-
-	// Disable interface for the current container
-	UFUNCTION(Category = "MenuPadPlus | Utilities", BlueprintCallable)
-	static bool DisableInterface(TScriptInterface<IMenuPadPlusInterface> Container);
-
-	//UFUNCTION(Category = "MenuPadPlus | Utilities", BlueprintCallable)
-	//static bool EnableInterface(TScriptInterface<IMenuPadPlusInterface> Container);
-
+	
 	// Sets Focus on a Button in Menu, using a Player Controller
 	UFUNCTION(Category = "MenuPadPlus | Utilities", BlueprintCallable)
-	static void SetButtonFocus(class UMenuPadPlusButton* NavigableWidget, class AMyPlayerController* InPC);
-
+	static void SetButtonFocus(class UMenuPadPlusButton* NavigableWidget, class AMyPlayerController* PlayerController);
 
 };

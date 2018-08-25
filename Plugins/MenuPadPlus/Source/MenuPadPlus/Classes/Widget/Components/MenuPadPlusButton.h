@@ -34,7 +34,7 @@ class IMenuPadPlusInterface;
 * * Clickable
 * * Text (Optional)
 */
-UCLASS(Blueprintable, BlueprintType)
+UCLASS(Blueprintable, BlueprintType, meta=(DisplayName="Button"))
 class MENUPADPLUS_API UMenuPadPlusButton : public UButton
 {
 	GENERATED_BODY()
@@ -109,23 +109,31 @@ public:
 	UPROPERTY(Category = "MenuPadPlus | Widgets | Navigation", BlueprintReadOnly)
 	TScriptInterface<IMenuPadPlusInterface> OwnerContainer;
  
-	UFUNCTION(Category = "Button", BlueprintCallable)
-	virtual void ForceNormal();
+	UFUNCTION(BlueprintCallable, Category = "Button")
+	virtual void ForceNormalText();
 
-	UFUNCTION(Category = "Button", BlueprintCallable)
-	virtual void ForceHover();
+	UFUNCTION(BlueprintCallable, Category = "Button")
+	virtual void ForceHoveredText();
 
-	UFUNCTION(Category = "Button", BlueprintCallable)
-	virtual void ForcePressed();
+	UFUNCTION(BlueprintCallable, Category = "Button")
+	virtual void ForcePressedText();
 
-	bool hasForcedNormal;
-	bool hasForcedHover;
-	bool hasForcedPressed;
-	bool canPlayHoveredSound;
+	bool bHasForcedNormal;
+	bool bHasForcedHover;
+	bool bHasForcedPressed;
+	bool bCanPlayHoveredSound;
 
 	// Customize OnHovered Delegate
 	UFUNCTION(Category=Default)
 	virtual void OnHoveredLogic();
+
+	// Customize OnPressed Delegate
+	UFUNCTION(Category = Default)
+	virtual void OnPressedLogic();
+
+	// Customize OnReleased Delegate
+	UFUNCTION(Category = Default)
+	virtual void OnReleasedLogic();
 
 	// Pointer to the underlying slate button owned by this UWidget
 	TSharedPtr<STextBlock> OptionalTextBlock;

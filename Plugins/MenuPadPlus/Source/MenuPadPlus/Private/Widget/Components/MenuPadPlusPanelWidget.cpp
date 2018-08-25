@@ -19,10 +19,13 @@
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 #include "Runtime/Engine/Classes/GameFramework/PlayerController.h"
 #include "Runtime/Engine/Classes/GameFramework/Actor.h"
+#include "Runtime/Engine/Classes/Engine/Texture.h"
+#include "Runtime/Engine/Classes/Engine/Texture2D.h"
 #include "Runtime/Engine/Classes/Engine/World.h"
 #include "../../../Classes/GameFramework/MyPlayerController.h"
 
 #define LOCTEXT_NAMESPACE "MenuPadPlus"
+#define PLAYER_CONTROLLER_INDEX 0
 
 void UMenuPadPlusPanelWidget::BindData()
 {
@@ -39,7 +42,7 @@ UMenuPadPlusButton* UMenuPadPlusPanelWidget::GetFocusedWidget()
 {
 	for (auto& Widget : Buttons)
 	{
-		if (Widget->hasForcedHover)
+		if (Widget->bHasForcedHover)
 			return Widget;
 	}
 
@@ -53,7 +56,7 @@ UMenuPadPlusButton* UMenuPadPlusPanelWidget::GetFirstWidget()
 
 AMyPlayerController* UMenuPadPlusPanelWidget::GetOwningPlayerController()
 {
-	return Cast<AMyPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
+	return Cast<AMyPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), PLAYER_CONTROLLER_INDEX));
 }
 
 bool UMenuPadPlusPanelWidget::DoesContainButtons()
@@ -64,10 +67,9 @@ bool UMenuPadPlusPanelWidget::DoesContainButtons()
 void UMenuPadPlusPanelWidget::ResetAllWidgetFocus()
 {
 	for (auto const& Widget : Buttons)
-		Widget->ForceNormal();
+		Widget->ForceNormalText();
 
-	if (GetOwningPlayerController() != nullptr)
-		UMenuPadPlusStatics::SetButtonFocus(GetFirstWidget(), GetOwningPlayerController());
+	if (GetOwningPlayerController() != nullptr) UMenuPadPlusStatics::SetButtonFocus(GetFirstWidget(), GetOwningPlayerController());
 }
 
 #undef LOCTEXT_NAMESPACE

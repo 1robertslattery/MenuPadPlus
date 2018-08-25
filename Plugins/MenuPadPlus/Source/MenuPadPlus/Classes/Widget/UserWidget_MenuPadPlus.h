@@ -22,87 +22,77 @@
 #include "Runtime/UMG/Public/Components/TextBlock.h"
 #include "UserWidget_MenuPadPlus.generated.h"
 
+#define SUCCESS 0
+#define FAILURE -1
+
+#define ROOT_MENU_ONE 0
+#define ROOT_MENU_TWO 1
+#define ROOT_MENU_THREE 2
+#define ROOT_MENU_FOUR 3
+#define ROOT_MENU_FIVE 4
+#define ROOT_MENU_SIX 5
+#define ROOT_MENU_SEVEN 6
+#define ROOT_MENU_EIGHT 7
+#define ROOT_MENU_NINE 8
+#define ROOT_MENU_TEN 9
+#define ROOT_MENU_ELEVEN 10
+#define ROOT_MENU_TWELVE 11
+
+#define PLAYER_CONTROLLER_INDEX 0
+
 class IMenuPadPlusInterface;
 
 USTRUCT(BlueprintType)
 struct FMenuPadPlusButtonProperties
 {
 	GENERATED_USTRUCT_BODY()
-
-	// Normal State Image
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MenuPadPlus | Widgets | Textures")
-	class UObject* NormalTexture;
-
-	// Hovered State Image
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MenuPadPlus | Widgets | Textures")
-	class UObject* HoveredTexture;
-
-	// Pressed State Image
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MenuPadPlus | Widgets | Textures")
-	class UObject* PressedTexture;
-
-	// Hovered Sound Cue
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MenuPadPlus | Widgets | Sounds")
-	class USoundCue* HoveredSound;
-
-	// Pressed Sound Cue
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MenuPadPlus | Widgets | Sounds")
-	class USoundCue* PressedSound;
-			
-	// Button Size X
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MenuPadPlus | Widgets")
-	float ImageX;
-
-	// Button Size Y
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MenuPadPlus | Widgets")
-	float ImageY;
-			
+				
 	// Which key should we use to handle going back in menus?
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MenuPadPlus | Widgets")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MenuPadPlus")
 	FKey GoBackButton;
 
 	// All Box Children
-	TArray<class UMenuPadPlusPanelWidget*, TInlineAllocator<8>> BoxArray;
+	TArray<class UMenuPadPlusPanelWidget*, TInlineAllocator<12>> BoxArray;
+
+	// All Normal Texture Children
+	TArray<class UTexture2D*, TInlineAllocator<64>> NormalTextureArray;
+
+	// All Hovered Texture Children
+	TArray<class UTexture2D*, TInlineAllocator<64>> HoveredTextureArray;
+
+	// All Pressed Texture Children
+	TArray<class UTexture2D*, TInlineAllocator<64>> PressedTextureArray;
 	
 	FORCEINLINE void ClearAll()
 	{
 		BoxArray.Empty();
+		NormalTextureArray.Empty();
+		HoveredTextureArray.Empty();
+		PressedTextureArray.Empty();
 	}
 	
 	explicit FMenuPadPlusButtonProperties() {}
 
 	FMenuPadPlusButtonProperties(
-		  class UObject* _NormalTexture
-		, class UObject* _HoveredTexture
-		, class UObject* _PressedTexture
-		, class USoundCue* _HoveredSound
-		, class USoundCue* _PressedSound
-		, float _ImageX
-		, float _ImageY
-		, FKey _GoBackButton
-		, TArray<class UMenuPadPlusPanelWidget*, TInlineAllocator<8>> _BoxArray) :
-		  NormalTexture(_NormalTexture)
-		, HoveredTexture(_HoveredTexture)
-		, PressedTexture(_PressedTexture)
-		, HoveredSound(_HoveredSound)
-		, PressedSound(_PressedSound)
-		, ImageX(_ImageX)
-		, ImageY(_ImageY)
-		, GoBackButton(_GoBackButton)
+		  FKey _GoBackButton
+		, TArray<class UMenuPadPlusPanelWidget*, TInlineAllocator<12>> _BoxArray
+		, TArray<class UTexture2D*, TInlineAllocator<64>> _NormalTextureArray
+		, TArray<class UTexture2D*, TInlineAllocator<64>> _HoveredTextureArray
+		, TArray<class UTexture2D*, TInlineAllocator<64>> _PressedTextureArray) :
+		  GoBackButton(_GoBackButton)
 		, BoxArray(_BoxArray)
+		, NormalTextureArray(_NormalTextureArray)
+		, HoveredTextureArray(_HoveredTextureArray)
+		, PressedTextureArray(_PressedTextureArray)
 		{}
 
 	friend bool operator==(const FMenuPadPlusButtonProperties& A, const FMenuPadPlusButtonProperties& B)
 	{
-		return (A.NormalTexture == B.NormalTexture
-			&& A.HoveredTexture == B.HoveredTexture
-			&& A.PressedTexture == B.PressedTexture
-			&& A.HoveredSound == B.HoveredSound
-			&& A.PressedSound == B.HoveredSound
-			&& A.ImageX == B.ImageX
-			&& A.ImageY == B.ImageY
-			&& A.GoBackButton == B.GoBackButton
-			&& A.BoxArray == B.BoxArray);
+		return (A.GoBackButton == B.GoBackButton
+			&& A.BoxArray == B.BoxArray
+			&& A.NormalTextureArray == B.NormalTextureArray
+			&& A.HoveredTextureArray == B.HoveredTextureArray
+			&& A.PressedTextureArray == B.PressedTextureArray);
 	}
 };
 
@@ -134,6 +124,18 @@ struct FMenuPadPlusBoxData
 
 	UPROPERTY()
 	class UMenuPadPlusPanelWidget* RootMenu_8;
+
+	UPROPERTY()
+	class UMenuPadPlusPanelWidget* RootMenu_9;
+
+	UPROPERTY()
+	class UMenuPadPlusPanelWidget* RootMenu_10;
+
+	UPROPERTY()
+	class UMenuPadPlusPanelWidget* RootMenu_11;
+
+	UPROPERTY()
+	class UMenuPadPlusPanelWidget* RootMenu_12;
 	
 	explicit FMenuPadPlusBoxData() {}
 
@@ -145,7 +147,11 @@ struct FMenuPadPlusBoxData
 		, class UMenuPadPlusPanelWidget* _RootMenu_5
 		, class UMenuPadPlusPanelWidget* _RootMenu_6
 		, class UMenuPadPlusPanelWidget* _RootMenu_7
-		, class UMenuPadPlusPanelWidget* _RootMenu_8) :
+		, class UMenuPadPlusPanelWidget* _RootMenu_8
+		, class UMenuPadPlusPanelWidget* _RootMenu_9
+		, class UMenuPadPlusPanelWidget* _RootMenu_10
+		, class UMenuPadPlusPanelWidget* _RootMenu_11
+		, class UMenuPadPlusPanelWidget* _RootMenu_12) :
 		  RootMenu_1(_RootMenu_1)
 		, RootMenu_2(_RootMenu_2)
 		, RootMenu_3(_RootMenu_3)
@@ -154,6 +160,10 @@ struct FMenuPadPlusBoxData
 		, RootMenu_6(_RootMenu_6)
 		, RootMenu_7(_RootMenu_7)
 		, RootMenu_8(_RootMenu_8)
+		, RootMenu_9(_RootMenu_9)
+		, RootMenu_10(_RootMenu_10)
+		, RootMenu_11(_RootMenu_11)
+		, RootMenu_12(_RootMenu_12)
 		{}
 
 	friend bool operator==(const FMenuPadPlusBoxData& A, const FMenuPadPlusBoxData& B)
@@ -165,7 +175,11 @@ struct FMenuPadPlusBoxData
 			&& A.RootMenu_5 == B.RootMenu_5
 			&& A.RootMenu_6 == B.RootMenu_6
 			&& A.RootMenu_7 == B.RootMenu_7
-			&& A.RootMenu_8 == B.RootMenu_8);
+			&& A.RootMenu_8 == B.RootMenu_8
+			&& A.RootMenu_9 == B.RootMenu_9
+			&& A.RootMenu_10 == B.RootMenu_10
+			&& A.RootMenu_11 == B.RootMenu_11
+			&& A.RootMenu_12 == B.RootMenu_12);
 	}
 };
 
@@ -185,30 +199,35 @@ public:
 	
 public:
 
-	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-					MenuPadPlus
-	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-			
-	// Find all possible Vertical/Horizontal Boxes (Supports up to 8)
+	//~ Begin MenuPadPlus
+	// Find all possible Vertical/Horizontal Boxes (Supports up to 12)
 	int32 InitMenus();
 		
 	// Adds Menus to array and sets their Button children
-	void SetMenuChildren(class UMenuPadPlusPanelWidget* RootMenu, const int32 Index);
-	UMenuPadPlusPanelWidget* AddToArray(class UMenuPadPlusPanelWidget* RootMenu);
+	int32 SetMenuChildren(class UMenuPadPlusPanelWidget* RootMenu, const int32 Index);
+	UMenuPadPlusPanelWidget* FillArrayWith(class UMenuPadPlusPanelWidget* RootMenu);
 
 	// Method to run the system
-	void MenuPadPlusLogic(float DeltaSeconds);
+	void RunMenuPadPlus(float DeltaSeconds);
 
 	// The actual handling of Normal/Hover/Pressed States
 	void OnJoystickAxisChanged(
 		  TArray<class UMenuPadPlusButton*> ButtonsArray
+		, class AMyPlayerController* InPC);
+
+	void OnJoystickAxisChangedAlternate(
+		  TArray<class UMenuPadPlusButton*> ButtonsArray
 		, class UObject* NormalTexture
 		, class UObject* HoveredTexture
 		, class UObject* PressedTexture
+		, float ImageSizeX
+		, float ImageSizeY
+		, class USoundCue* HoveredSound
+		, class USoundCue* PressedSound
 		, class AMyPlayerController* InPC);
 		
 	// Which menus will allow joystick changes?
-	void HandleMenuAt(const int32 Index);
+	void RunMenuAt(const int32 Index);
 
 	UMenuPadPlusButton* GetFocusedWidget(TArray<class UMenuPadPlusButton*> Buttons);
 	UMenuPadPlusButton* GetFirstWidget();
@@ -217,29 +236,26 @@ public:
 		
 	template<typename AllocatorType>
 	int32 GetNumMenus(TArray<class UMenuPadPlusPanelWidget*, AllocatorType>& RootMenus);
-
-	float GetDelay();
+	float GetTimer();
 	float GetTimeNeededToLoad();
-	float RunDelay(float DeltaSeconds);
+	float RunTimer(float DeltaSeconds);
 
 private:
 
 	float Timer;
 	float TimeNeededToLoad;
-	bool HasFinishedSetup;
+	bool bHasFinishedSetup;
 
 public:
 
 	// Interface Owner
-	UPROPERTY(Category = "MenuPadPlus | Widgets | Navigation", BlueprintReadOnly)
+	UPROPERTY(Category = "MenuPadPlus", BlueprintReadOnly)
 	TScriptInterface<IMenuPadPlusInterface> OwnerContainer;
 	
-	// Allow Reference to FMenuPadPlusButtonProperties
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MenuPadPlus | Widgets")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MenuPadPlus")
 	FMenuPadPlusButtonProperties ButtonProperties;
 	
-	// Allow Reference to FMenuPadPlusBoxData
-	UPROPERTY(BlueprintReadOnly, Category = "MenuPadPlus | Widgets")
+	UPROPERTY(BlueprintReadOnly, Category = "MenuPadPlus")
 	FMenuPadPlusBoxData BoxData;
 	//~ End MenuPadPlus 
 };

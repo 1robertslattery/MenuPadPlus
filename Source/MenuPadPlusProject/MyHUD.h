@@ -35,21 +35,15 @@ protected:
 	//~ Begin Actor Interface
 	virtual void BeginPlay() override;
 	//~ End Actor Interface
-	
+
 public:
 	
-	/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-					MenuPadPlus
-	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
+	//~ Begin MenuPadPlus
 	// Widget Blueprint Class
 	UPROPERTY()
 	TSubclassOf<class UUserWidget_MenuPadPlus> MenuWidgetBlueprint;
-
-	// Pointer to Widget Class
-	UPROPERTY()
-	class UUserWidget_MenuPadPlus* MenuPtr;
-
+	
 	// Create Widget Method
 	void InitMenuPadPlus();
+	//~ End MenuPadPlus
 };

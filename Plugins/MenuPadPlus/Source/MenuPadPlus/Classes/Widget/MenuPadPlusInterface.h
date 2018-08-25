@@ -23,11 +23,7 @@ class UMenuPadPlusButton;
 class AMyPlayerController;
 
 UINTERFACE(Blueprintable)
-class MENUPADPLUS_API UMenuPadPlusInterface : public UInterface
-{
-	GENERATED_BODY()
-
-};
+class MENUPADPLUS_API UMenuPadPlusInterface : public UInterface {  GENERATED_BODY()  };
 
 class MENUPADPLUS_API IMenuPadPlusInterface
 {
@@ -36,8 +32,8 @@ class MENUPADPLUS_API IMenuPadPlusInterface
 public:
 	
 	// Interface Status Variables
-	bool Initialized;
-	bool IsActive;
+	bool bInitialized;
+	bool bIsActive;
 
 	// Allows reference to interface derived from UObject
 	TScriptInterface<class IMenuPadPlusInterface> Parent;

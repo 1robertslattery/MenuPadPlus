@@ -12,24 +12,18 @@
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, 
 // WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-#include "../../Classes/Widget/MenuPadPlusInterface.h"
-#include "../../Classes/Widget/Components/MenuPadPlusButton.h"
-#include "Runtime/Engine/Classes/GameFramework/PlayerController.h"
-#include "../../Classes/GameFramework/MyPlayerController.h"
+#pragma once
 
-// Startup Interface 
-void IMenuPadPlusInterface::Startup()
-{
-	UnBindData();
-	BindData();
-	if (!bInitialized) bInitialized = true;
-}
+#include "Engine/GameViewportClient.h"
+#include "MyGameViewportClient.generated.h"
 
-// Shutdown Interface
-void IMenuPadPlusInterface::Shutdown()
+UCLASS(Within=Engine, transient, config=Engine)
+class MENUPADPLUSPROJECT_API UMyGameViewportClient : public UGameViewportClient
 {
-	UnBindData();
-	ResetAllWidgetFocus();
-	if (bInitialized) bInitialized = false;
-	if (bIsActive) bIsActive = false;
-}
+    GENERATED_BODY()
+
+public:
+    
+    virtual TOptional<bool> QueryShowFocus(const EFocusCause InFocusCause) const override;
+
+};

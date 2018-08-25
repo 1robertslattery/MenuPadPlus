@@ -12,24 +12,10 @@
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, 
 // WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-#include "../../Classes/Widget/MenuPadPlusInterface.h"
-#include "../../Classes/Widget/Components/MenuPadPlusButton.h"
-#include "Runtime/Engine/Classes/GameFramework/PlayerController.h"
-#include "../../Classes/GameFramework/MyPlayerController.h"
+#include "MyGameViewportClient.h"
 
-// Startup Interface 
-void IMenuPadPlusInterface::Startup()
+TOptional<bool> UMyGameViewportClient::QueryShowFocus(const EFocusCause InFocusCause) const
 {
-	UnBindData();
-	BindData();
-	if (!bInitialized) bInitialized = true;
-}
-
-// Shutdown Interface
-void IMenuPadPlusInterface::Shutdown()
-{
-	UnBindData();
-	ResetAllWidgetFocus();
-	if (bInitialized) bInitialized = false;
-	if (bIsActive) bIsActive = false;
+    // Disables outline of focused button
+    return false;
 }

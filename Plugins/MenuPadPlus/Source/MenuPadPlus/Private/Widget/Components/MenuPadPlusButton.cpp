@@ -27,6 +27,7 @@
 #include "../../../Classes/GameFramework/MyPlayerController.h"
 
 #define LOCTEXT_NAMESPACE "MenuPadPlus"
+#define PLAYER_CONTROLLER_INDEX 0
 
 UMenuPadPlusButton::UMenuPadPlusButton(const FObjectInitializer& ObjectInitializer)	: UButton(ObjectInitializer)
 {
@@ -42,11 +43,13 @@ UMenuPadPlusButton::UMenuPadPlusButton(const FObjectInitializer& ObjectInitializ
 	}
 
 	OnHovered.AddDynamic(this, &UMenuPadPlusButton::OnHoveredLogic);
+	OnPressed.AddDynamic(this, &UMenuPadPlusButton::OnPressedLogic);
+	OnReleased.AddDynamic(this, &UMenuPadPlusButton::OnReleasedLogic);
 
-	hasForcedNormal = false;
-	hasForcedHover = false;
-	hasForcedPressed = false;
-	canPlayHoveredSound = false;
+	bHasForcedNormal = false;
+	bHasForcedHover = false;
+	bHasForcedPressed = false;
+	bCanPlayHoveredSound = false;
 }
 
 TSharedRef<SWidget> UMenuPadPlusButton::RebuildWidget()
@@ -99,39 +102,48 @@ void UMenuPadPlusButton::ReleaseSlateResources(bool bReleaseChildren)
 	OptionalTextBlock.Reset();
 }
 
-// Force text highlighting behavior
-void UMenuPadPlusButton::ForceNormal()
+void UMenuPadPlusButton::ForceNormalText()
 {
 	OptionalTextBlock->SetColorAndOpacity(TextColorAndOpacity);
-	if (!hasForcedNormal) hasForcedNormal = true;
-	if (hasForcedHover) hasForcedHover = false;
-	if (hasForcedPressed) hasForcedPressed = false;
+	if (!bHasForcedNormal) bHasForcedNormal = true;
+	if (bHasForcedHover) bHasForcedHover = false;
+	if (bHasForcedPressed) bHasForcedPressed = false;
 }
 
-void UMenuPadPlusButton::ForceHover()
+void UMenuPadPlusButton::ForceHoveredText()
 {
 	OptionalTextBlock->SetColorAndOpacity(TextColorAndOpacityHover);
-	if(!hasForcedHover) hasForcedHover = true;
-	if (hasForcedNormal) hasForcedNormal = false;
-	if (hasForcedPressed) hasForcedPressed = false;
+	if(!bHasForcedHover) bHasForcedHover = true;
+	if (bHasForcedNormal) bHasForcedNormal = false;
+	if (bHasForcedPressed) bHasForcedPressed = false;
 }
 
-void UMenuPadPlusButton::ForcePressed()
+void UMenuPadPlusButton::ForcePressedText()
 {
 	OptionalTextBlock->SetColorAndOpacity(TextColorAndOpacityPressed);
-	if (!hasForcedPressed) hasForcedPressed = true;
+	if (!bHasForcedPressed) bHasForcedPressed = true;
 }
 
-// Customize OnHovered Delegate
 void UMenuPadPlusButton::OnHoveredLogic()
 {
-	auto const world = GetWorld();
+	auto const World = GetWorld();
 
-	if (world != nullptr)
+	if (ensure(World))
 	{
-		auto PC = Cast<AMyPlayerController>(UGameplayStatics::GetPlayerController(world, 0));
-		if (PC != nullptr) this->SetUserFocus(PC);
+		auto PC = Cast<AMyPlayerController>(UGameplayStatics::GetPlayerController(World, PLAYER_CONTROLLER_INDEX));
+		if (PC != nullptr) SetUserFocus(PC);
 	}
+}
+
+void UMenuPadPlusButton::OnPressedLogic()  
+{
+	ForcePressedText(); 
+}
+
+void UMenuPadPlusButton::OnReleasedLogic() 
+{ 
+	if (bHasForcedPressed) bHasForcedPressed = false; 
+	if (!bHasForcedHover) bHasForcedHover = true;
 }
 
 #if WITH_EDITOR
