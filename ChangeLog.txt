@@ -6,3 +6,7 @@
 + Created MyGameViewportClient class to disable outline of focused button
 + Fixed memory leaks in UserWidget_MenuPadPlus class
 + Improved OnPressed/OnHovered button delegates in MenuPadPlusButton class
+
+2018-11-17: v1.2.0:
++ Updated to UE v4.21
++ Improved syntax to better support C++11/14

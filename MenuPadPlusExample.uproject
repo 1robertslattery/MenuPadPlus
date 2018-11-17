@@ -1,11 +1,11 @@
 {
 	"FileVersion": 3,
-	"EngineAssociation": "4.20",
+	"EngineAssociation": "4.21",
 	"Category": "",
 	"Description": "",
 	"Modules": [
 		{
-			"Name": "MenuPadPlusProject",
+			"Name": "MenuPadPlusExample",
 			"Type": "Runtime",
 			"LoadingPhase": "Default"
 		}

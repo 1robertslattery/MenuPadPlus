@@ -24,7 +24,7 @@ and allows for changes in the UMG Blueprints graph.
 
 Video Tutorial [here](https://youtu.be/rJ23w__VuhQ)
 
-The MenuPadPlus repository includes the UE4 project MenuPadPlusProject. If you do not wish to use this project example, 
+The MenuPadPlus repository includes the UE4 project MenuPadPlusExample. If you do not wish to use this project example, 
 move the Plugins folder of this repository to the root directory of your game and rebuild in Visual Studio.  Build out your Plugins
 folders in Visual Studio with "Add Filter" then drag in each file.
 
@@ -64,4 +64,4 @@ you must rebuild both your project and the plugin in Visual Studio outside of Un
 
 ## NOTES
 
-Compiled with v4.20.  This software requires one gamepad/controller.  MenuPadPlus is shipped as-is without warranty.
+Tested to work in v4.20 and v4.21 for Windows.  This software requires one gamepad/controller.  MenuPadPlus is shipped as-is without warranty.
