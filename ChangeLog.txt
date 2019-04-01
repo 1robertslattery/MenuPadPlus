@@ -10,3 +10,6 @@
 2018-11-17: v1.2.0:
 + Updated to UE v4.21
 + Improved syntax to better support C++11/14
+
+2019-03-31: v1.2.1:
++ Lines 98-132 in UserWidget_MenuPadPlus.h replaced with TArray structure for simplicity

@@ -1,6 +1,6 @@
 /*
 * MIT License
-* Copyright (c) 2018 Robert Slattery
+* Copyright (c) 2018-2019 Robert Slattery
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
@@ -73,6 +73,7 @@ void UUserWidget_MenuPadPlus::NativeConstruct()
 	ButtonProperties.NormalTextureArray.Empty();
 	ButtonProperties.HoveredTextureArray.Empty();
 	ButtonProperties.PressedTextureArray.Empty();
+	BoxData.RootMenuArray.Empty();
 	InitMenus();
 	//~ End MenuPadPlus
 }
@@ -83,20 +84,7 @@ void UUserWidget_MenuPadPlus::NativeDestruct()
 
 	//~ Begin MenuPadPlus
 	ButtonProperties.ClearAll();
-		
-	if (BoxData.RootMenu_1)  { delete BoxData.RootMenu_1;  BoxData.RootMenu_1 = nullptr; }
-	if (BoxData.RootMenu_2)  { delete BoxData.RootMenu_2;  BoxData.RootMenu_2 = nullptr; }
-	if (BoxData.RootMenu_3)  { delete BoxData.RootMenu_3;  BoxData.RootMenu_3 = nullptr; }
-	if (BoxData.RootMenu_4)  { delete BoxData.RootMenu_4;  BoxData.RootMenu_4 = nullptr; }
-	if (BoxData.RootMenu_5)  { delete BoxData.RootMenu_5;  BoxData.RootMenu_5 = nullptr; }
-	if (BoxData.RootMenu_6)  { delete BoxData.RootMenu_6;  BoxData.RootMenu_6 = nullptr; }
-	if (BoxData.RootMenu_7)  { delete BoxData.RootMenu_7;  BoxData.RootMenu_7 = nullptr; }
-	if (BoxData.RootMenu_8)  { delete BoxData.RootMenu_8;  BoxData.RootMenu_8 = nullptr; }
-	if (BoxData.RootMenu_9)	 { delete BoxData.RootMenu_9;  BoxData.RootMenu_9 = nullptr; }
-	if (BoxData.RootMenu_10) { delete BoxData.RootMenu_10; BoxData.RootMenu_10 = nullptr; }
-	if (BoxData.RootMenu_11) { delete BoxData.RootMenu_11; BoxData.RootMenu_11 = nullptr; }
-	if (BoxData.RootMenu_12) { delete BoxData.RootMenu_12; BoxData.RootMenu_12 = nullptr; }
-	
+	BoxData.RootMenuArray.Empty();
 	OwnerContainer = nullptr;
 	//~ End MenuPadPlus
 }
@@ -167,31 +155,29 @@ FReply UUserWidget_MenuPadPlus::NativeOnKeyUp(const FGeometry& InGeometry, const
 int32 UUserWidget_MenuPadPlus::InitMenus()
 {
 	// Allows 12 by default
-	BoxData.RootMenu_1 = nullptr;
-	BoxData.RootMenu_2 = nullptr;
-	BoxData.RootMenu_3 = nullptr;
-	BoxData.RootMenu_4 = nullptr;
-	BoxData.RootMenu_5 = nullptr;
-	BoxData.RootMenu_6 = nullptr;
-	BoxData.RootMenu_7 = nullptr;
-	BoxData.RootMenu_8 = nullptr;
-	BoxData.RootMenu_9 = nullptr;
-	BoxData.RootMenu_10 = nullptr;
-	BoxData.RootMenu_11 = nullptr;
-	BoxData.RootMenu_12 = nullptr;
+	auto Size = 12;
+	BoxData.RootMenuArray.Reserve(Size);
 
-	SetMenuChildren(BoxData.RootMenu_1, ROOT_MENU_ONE);
-	SetMenuChildren(BoxData.RootMenu_2, ROOT_MENU_TWO);
-	SetMenuChildren(BoxData.RootMenu_3, ROOT_MENU_THREE);
-	SetMenuChildren(BoxData.RootMenu_4, ROOT_MENU_FOUR);
-	SetMenuChildren(BoxData.RootMenu_5, ROOT_MENU_FIVE);
-	SetMenuChildren(BoxData.RootMenu_6, ROOT_MENU_SIX);
-	SetMenuChildren(BoxData.RootMenu_7, ROOT_MENU_SEVEN);
-	SetMenuChildren(BoxData.RootMenu_8, ROOT_MENU_EIGHT);
-	SetMenuChildren(BoxData.RootMenu_9, ROOT_MENU_NINE);
-	SetMenuChildren(BoxData.RootMenu_10, ROOT_MENU_TEN);
-	SetMenuChildren(BoxData.RootMenu_11, ROOT_MENU_ELEVEN);
-	SetMenuChildren(BoxData.RootMenu_12, ROOT_MENU_TWELVE);
+	for (int32 i = 0; i < 12; ++i)
+	{
+		class UMenuPadPlusPanelWidget* Temp = nullptr;
+		BoxData.RootMenuArray.Add(Temp);
+	}
+	
+	{
+		SetMenuChildren(BoxData.RootMenuArray[0], ROOT_MENU_ONE);
+		SetMenuChildren(BoxData.RootMenuArray[1], ROOT_MENU_TWO);
+		SetMenuChildren(BoxData.RootMenuArray[2], ROOT_MENU_THREE);
+		SetMenuChildren(BoxData.RootMenuArray[3], ROOT_MENU_FOUR);
+		SetMenuChildren(BoxData.RootMenuArray[4], ROOT_MENU_FIVE);
+		SetMenuChildren(BoxData.RootMenuArray[5], ROOT_MENU_SIX);
+		SetMenuChildren(BoxData.RootMenuArray[6], ROOT_MENU_SEVEN);
+		SetMenuChildren(BoxData.RootMenuArray[7], ROOT_MENU_EIGHT);
+		SetMenuChildren(BoxData.RootMenuArray[8], ROOT_MENU_NINE);
+		SetMenuChildren(BoxData.RootMenuArray[9], ROOT_MENU_TEN);
+		SetMenuChildren(BoxData.RootMenuArray[10], ROOT_MENU_ELEVEN);
+		SetMenuChildren(BoxData.RootMenuArray[11], ROOT_MENU_TWELVE);
+	}
 
 	return SUCCESS;
 }

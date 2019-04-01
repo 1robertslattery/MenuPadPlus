@@ -1,6 +1,6 @@
 /*
 * MIT License
-* Copyright (c) 2018 Robert Slattery
+* Copyright (c) 2018-2019 Robert Slattery
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
@@ -96,84 +96,13 @@ struct FMenuPadPlusBoxData
 	GENERATED_USTRUCT_BODY()
 
 	UPROPERTY()
-	class UMenuPadPlusPanelWidget* RootMenu_1;
-
-	UPROPERTY()
-	class UMenuPadPlusPanelWidget* RootMenu_2;
-	
-	UPROPERTY()
-	class UMenuPadPlusPanelWidget* RootMenu_3;
-	
-	UPROPERTY()
-	class UMenuPadPlusPanelWidget* RootMenu_4;
-	
-	UPROPERTY()
-	class UMenuPadPlusPanelWidget* RootMenu_5;
-	
-	UPROPERTY()
-	class UMenuPadPlusPanelWidget* RootMenu_6;
-
-	UPROPERTY()
-	class UMenuPadPlusPanelWidget* RootMenu_7;
-
-	UPROPERTY()
-	class UMenuPadPlusPanelWidget* RootMenu_8;
-
-	UPROPERTY()
-	class UMenuPadPlusPanelWidget* RootMenu_9;
-
-	UPROPERTY()
-	class UMenuPadPlusPanelWidget* RootMenu_10;
-
-	UPROPERTY()
-	class UMenuPadPlusPanelWidget* RootMenu_11;
-
-	UPROPERTY()
-	class UMenuPadPlusPanelWidget* RootMenu_12;
-	
-	explicit FMenuPadPlusBoxData() {}
-
-	FMenuPadPlusBoxData(
-		  class UMenuPadPlusPanelWidget* _RootMenu_1
-		, class UMenuPadPlusPanelWidget* _RootMenu_2
-		, class UMenuPadPlusPanelWidget* _RootMenu_3
-		, class UMenuPadPlusPanelWidget* _RootMenu_4
-		, class UMenuPadPlusPanelWidget* _RootMenu_5
-		, class UMenuPadPlusPanelWidget* _RootMenu_6
-		, class UMenuPadPlusPanelWidget* _RootMenu_7
-		, class UMenuPadPlusPanelWidget* _RootMenu_8
-		, class UMenuPadPlusPanelWidget* _RootMenu_9
-		, class UMenuPadPlusPanelWidget* _RootMenu_10
-		, class UMenuPadPlusPanelWidget* _RootMenu_11
-		, class UMenuPadPlusPanelWidget* _RootMenu_12) :
-		  RootMenu_1(_RootMenu_1)
-		, RootMenu_2(_RootMenu_2)
-		, RootMenu_3(_RootMenu_3)
-		, RootMenu_4(_RootMenu_4)
-		, RootMenu_5(_RootMenu_5)
-		, RootMenu_6(_RootMenu_6)
-		, RootMenu_7(_RootMenu_7)
-		, RootMenu_8(_RootMenu_8)
-		, RootMenu_9(_RootMenu_9)
-		, RootMenu_10(_RootMenu_10)
-		, RootMenu_11(_RootMenu_11)
-		, RootMenu_12(_RootMenu_12)
-		{}
+	TArray<class UMenuPadPlusPanelWidget*> RootMenuArray;
+		
+	FMenuPadPlusBoxData() { RootMenuArray.Empty(); }
 
 	friend bool operator==(const FMenuPadPlusBoxData& A, const FMenuPadPlusBoxData& B)
 	{
-		return (A.RootMenu_1 == B.RootMenu_1
-			&& A.RootMenu_2 == B.RootMenu_2
-			&& A.RootMenu_3 == B.RootMenu_3
-			&& A.RootMenu_4 == B.RootMenu_4
-			&& A.RootMenu_5 == B.RootMenu_5
-			&& A.RootMenu_6 == B.RootMenu_6
-			&& A.RootMenu_7 == B.RootMenu_7
-			&& A.RootMenu_8 == B.RootMenu_8
-			&& A.RootMenu_9 == B.RootMenu_9
-			&& A.RootMenu_10 == B.RootMenu_10
-			&& A.RootMenu_11 == B.RootMenu_11
-			&& A.RootMenu_12 == B.RootMenu_12);
+		return (A.RootMenuArray == B.RootMenuArray);
 	}
 };
 
