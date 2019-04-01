@@ -71,8 +71,7 @@ protected:
 	IMenuPadPlusInterface(IMenuPadPlusInterface&&) = delete;
 
 	// Copy-Assignment Operator
-	// Protected assignment operator to prevent assignment on reference to this interface
-	IMenuPadPlusInterface& operator=(const IMenuPadPlusInterface&) { return *this; }
+	IMenuPadPlusInterface& operator=(const IMenuPadPlusInterface&) = delete;
 
 	// Move-Assignment Operator
 	IMenuPadPlusInterface& operator=(IMenuPadPlusInterface&&) = delete;

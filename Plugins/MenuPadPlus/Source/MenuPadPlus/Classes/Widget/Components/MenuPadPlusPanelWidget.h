@@ -42,7 +42,7 @@ class MENUPADPLUS_API UMenuPadPlusPanelWidget : public UPanelWidget, public IMen
 	GENERATED_BODY()
 	
 public:
-		
+
 	// All Button Children
 	UPROPERTY(BlueprintReadOnly, Category = "MenuPadPlus | Widgets")
 	TArray<class UMenuPadPlusButton*> Buttons;
@@ -71,15 +71,15 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MenuPadPlus | Sounds")
 	class USoundCue* AlternatePressedSound;
 
-	FORCEINLINE TArray<class UMenuPadPlusButton*> GetButtons() const noexcept { return Buttons; }
-	FORCEINLINE int32 GetAlternateImagesSize() const noexcept { return AlternateImages.Num(); }
+	FORCEINLINE TArray<class UMenuPadPlusButton*> GetButtons() const { return Buttons; }
+	FORCEINLINE int32 GetAlternateImagesSize() const { return AlternateImages.Num(); }
 	FORCEINLINE class UTexture2D* GetAlternateImages_Normal() const { return AlternateImages[0]; }
 	FORCEINLINE class UTexture2D* GetAlternateImages_Hovered() const { return AlternateImages[1]; }
 	FORCEINLINE class UTexture2D* GetAlternateImages_Pressed() const { return AlternateImages[2]; }
-	FORCEINLINE constexpr float GetAlternateSizeX() const noexcept { return AlternateSizeX; }
-	FORCEINLINE constexpr float GetAlternateSizeY() const noexcept { return AlternateSizeY; }
-	FORCEINLINE class USoundCue* GetAlternateHoveredSound() const noexcept { return AlternateHoveredSound; }
-	FORCEINLINE class USoundCue* GetAlternatePressedSound() const noexcept { return AlternatePressedSound; }
+	FORCEINLINE constexpr float GetAlternateSizeX() const { return AlternateSizeX; }
+	FORCEINLINE constexpr float GetAlternateSizeY() const { return AlternateSizeY; }
+	FORCEINLINE class USoundCue* GetAlternateHoveredSound() const { return AlternateHoveredSound; }
+	FORCEINLINE class USoundCue* GetAlternatePressedSound() const { return AlternatePressedSound; }
 	
 	//~ Begin IMenuPadPlusInterface
 	virtual void BindData() override;
